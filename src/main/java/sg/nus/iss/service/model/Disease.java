@@ -1,0 +1,69 @@
+package sg.nus.iss.service.model;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+
+
+@Entity
+public class Disease {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	private String name;
+
+	@ManyToMany
+	@JoinTable(name = "Disease_Symptom",
+	joinColumns = @JoinColumn(name = "disease_id"),
+	inverseJoinColumns = @JoinColumn(name = "symptom_id"))
+	@JsonIgnore
+	private List<Symptom> symptoms;
+	
+	@ManyToOne
+	@JsonIgnore
+	private Department department;
+	
+	public Disease() {
+		
+	}
+	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public List<Symptom> getSymptoms() {
+		return symptoms;
+	}
+
+
+	public void setSymptoms(List<Symptom> symptoms) {
+		this.symptoms = symptoms;
+	}
+
+
+	public Department getDepartment() {
+		return department;
+	}
+
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+
+}
