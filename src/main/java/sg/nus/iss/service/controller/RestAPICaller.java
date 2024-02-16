@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -101,8 +102,8 @@ public class RestAPICaller {
 			return new ResponseEntity<Patient>(HttpStatus.NOT_FOUND);
 		}
 	}
-	@PostMapping("/addpatient/{id}")
-	public ResponseEntity<Patient> AddPatient(@ModelAttribute("patient") Patient patient,@PathVariable("id") int userid){
+	@PostMapping("/addpatient/{userid}")
+	public ResponseEntity<Patient> AddPatient(@ModelAttribute("patient") Patient patient,@PathVariable("userid") int userid){
 		try {
 			pservice.addPatient(patient,userid);
 			return new ResponseEntity<Patient>(patient,HttpStatus.OK);
@@ -172,13 +173,13 @@ public class RestAPICaller {
 	@PostMapping("/addappointment")
 	public ResponseEntity<Appointment> Adddappointment(@ModelAttribute("appointment") Appointment appointment,@RequestParam("userid") int userid,@RequestParam("staffid") int staffid,@RequestParam("patientid") int patientid){
 		try {
-			Appointment saveappointment = appointment;
-			saveappointment.setPatient(pservice.findpatientbyid(patientid));
-			saveappointment.setStaff(sservice.findstaffbyid(staffid));
-			saveappointment.setCustomer(uservice.finduserbyid(userid));
-			aservice.addappointment(saveappointment);
-			scheservice.increaseslot(sservice.findstaffbyid(staffid), saveappointment.getQueue_number(), saveappointment.getTime());
-			return new ResponseEntity<Appointment>(saveappointment,HttpStatus.OK);
+			//Appointment saveappointment = appointment;
+			appointment.setPatient(pservice.findpatientbyid(patientid));
+			appointment.setStaff(sservice.findstaffbyid(staffid));
+			appointment.setCustomer(uservice.finduserbyid(userid));
+			Appointment saveappointment = aservice.addappointment(appointment);
+			scheservice.increaseslot(sservice.findstaffbyid(staffid), appointment.getQueue_number(), appointment.getTime());
+			return new ResponseEntity<Appointment>(appointment,HttpStatus.OK);
 		}catch(Exception e) {
 			return new ResponseEntity<Appointment>(HttpStatus.EXPECTATION_FAILED);
 		}
@@ -312,6 +313,26 @@ public class RestAPICaller {
 			return new ResponseEntity<Appointment>(HttpStatus.NOT_FOUND);
 		}
 	} 
+	
+	@DeleteMapping("/removepatient/{userid}/{patientid}")
+	public ResponseEntity<String> AddPatient(@PathVariable("patientid") int patientid,@PathVariable("userid") int userid){
+		try {
+			pservice.RemovePaient(patientid, userid);
+			return new ResponseEntity<String>("Successful",HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+	
+	@PostMapping("/registeruser")
+	public ResponseEntity<Customer> AddCustomer(@ModelAttribute("customer") Customer customer){
+		try {
+			uservice.register(customer);
+			return new ResponseEntity<Customer>(customer,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<Customer>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
 	
 	
 }

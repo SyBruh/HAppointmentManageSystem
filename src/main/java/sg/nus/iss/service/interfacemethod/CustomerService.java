@@ -9,4 +9,5 @@ public interface CustomerService {
 	List<Patient> findpatientsbyUserID(int id);
 	Customer UserAuthentication(String name,String password);
 	Customer finduserbyid(int id);
+	Customer register(Customer customer);
 }

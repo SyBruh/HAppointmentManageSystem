@@ -17,7 +17,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Integer>{
 	public List<Schedule> getdoctorSchedules(@Param("id") int id);
 	
 	@Modifying
-	@Query("Update Schedule s set patient_slot = :count where s.staff = :staff AND time_start = :time")
+	@Query("Update Schedule s set patient_slot = :count where s.staff = :staff AND time_start = CAST(:time AS java.sql.Time)")
 	public void increaseslot(@Param("staff") Staff staff,@Param("count") int count,@Param("time") LocalTime time);
 
 }

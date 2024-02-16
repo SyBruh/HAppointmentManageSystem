@@ -18,5 +18,9 @@ public interface CustomerRepository extends JpaRepository<Customer,Integer> {
 	@Modifying
 	@Query(value = "Insert into Customer_Patient (customer_id,patient_id) VALUES (:customerid, :patientid)", nativeQuery = true)
 	public void insertUserPatientRelation(@Param("customerid") int customerid,@Param("patientid") int patientid);
+	
+	@Modifying
+	@Query(value = "Delete From Customer_Patient cp Where customer_id = :customerid AND patient_id = :patientid",  nativeQuery = true)
+	public void RemveUserPatientRelation(@Param("customerid") int customerid,@Param("patientid") int patientid);
 }
 

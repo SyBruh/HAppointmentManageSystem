@@ -6,4 +6,5 @@ public interface PatientService {
 	Patient findpatientbyid(int id);
 	Boolean addPatient(Patient patient,int UserID);
 	Patient Updatepatient(Patient patient, int userid);
+	void RemovePaient(int patientid,int userid);
 }

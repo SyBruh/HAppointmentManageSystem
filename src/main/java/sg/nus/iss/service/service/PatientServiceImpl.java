@@ -53,4 +53,11 @@ public class PatientServiceImpl implements PatientService {
 		return savepatient;
 	}
 
+	@Override
+	@Transactional
+	public void RemovePaient(int patientid, int userid) {
+		// TODO Auto-generated method stub
+		customerrepository.RemveUserPatientRelation(userid, patientid);
+	}
+
 }
